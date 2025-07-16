@@ -1,6 +1,7 @@
 import express from "express";
 import { PORT } from "./config/serverConfig.js";
 import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.routes.js";
 import { connectDB } from "./config/dbConfig.js";
 import cookieParser from "cookie-parser";
 
@@ -10,6 +11,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/message", messageRoutes);
 
 app.get("/ping", (req, res) => {
   return res.json({ message: "Pong" });
