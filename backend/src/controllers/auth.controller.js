@@ -93,14 +93,21 @@ export const logoutController = (req, res) => {
 
 export const updateProfileController = async (req, res) => {
   try {
-    const { profilePic } = req.body;
     const userId = req.user._id;
+    const file = req.file;
 
-    if (!profilePic) {
+    if (!file) {
       return res.status(400).json({ message: "Profile pic is required" });
     }
 
-    const uploadResponse = await cloudinary.uploader.upload(profilePic);
+    const base64Image = `data:${file.mimetype};base64,${file.buffer.toString(
+      "base64"
+    )}`;
+
+    const uploadResponse = await cloudinary.uploader.upload(base64Image, {
+      folder: "profile_pics",
+    });
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePic: uploadResponse.secure_url },

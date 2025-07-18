@@ -7,6 +7,7 @@ import {
   updateProfileController,
 } from "../controllers/auth.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
+import upload from "../middleware/upload.middleware.js";
 
 const router = express.Router();
 
@@ -16,7 +17,12 @@ router.post("/login", loginController);
 
 router.post("/logout", logoutController);
 
-router.put("/update-profile", protectRoute, updateProfileController);
+router.put(
+  "/update-profile",
+  protectRoute,
+  upload.single("profilePic"),
+  updateProfileController
+);
 
 router.get("/check", protectRoute, checkAuthController);
 
