@@ -5,8 +5,7 @@ import messageRoutes from "./routes/message.routes.js";
 import { connectDB } from "./config/dbConfig.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
-const app = express();
+import { app, server } from "./config/socket.js";
 
 app.use(express.json());
 app.use(cookieParser());
@@ -18,13 +17,13 @@ app.use(
 );
 
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/ping", (req, res) => {
   return res.json({ message: "Pong" });
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on PORT:${PORT}`);
   connectDB();
 });
