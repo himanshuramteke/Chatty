@@ -1,5 +1,5 @@
 import cloudinary from "../config/cloudinaryConfig.js";
-import { getReceiverSocketId, io } from "../config/socket.js";
+import { getReceiverSocketId, getIO } from "../config/socket.js";
 import Message from "../models/message.model.js";
 import User from "../models/user.model.js";
 
@@ -39,13 +39,20 @@ export const sendMessagesController = async (req, res) => {
   try {
     const { text, image } = req.body;
     const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const senderId = req.user?._id;
+
+    if (!senderId || !receiverId) {
+      console.log("senderId or receiverId missing");
+      return res.status(400).json({ message: "Invalid sender or receiver" });
+    }
 
     let imageUrl;
     if (image) {
+      console.log("Uploading image...");
       //Upload base64 to image to cloudinary
       const uploadResponse = await cloudinary.uploader.upload(image);
       imageUrl = uploadResponse.secure_url;
+      console.log("Image uploaded", imageUrl);
     }
 
     const newMessage = new Message({
@@ -58,12 +65,13 @@ export const sendMessagesController = async (req, res) => {
 
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
+      const io = getIO();
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
 
-    res.status(201).json(newMessage);
+    return res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessagesController", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
