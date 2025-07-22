@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { LoaderPinwheel } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
+import { AiPage } from "./pages/AiPage";
 
 function App() {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -50,6 +51,10 @@ function App() {
         <Route
           path="/profile"
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/ai"
+          element={authUser ? <AiPage /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />

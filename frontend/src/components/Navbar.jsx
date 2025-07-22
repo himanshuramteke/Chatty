@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
-import { LogOut, MessageSquare, Settings, User } from "lucide-react";
+import { LogOut, MessageSquare, Settings, User, Bot } from "lucide-react";
 
 export const Navbar = () => {
   const { logout, authUser } = useAuthStore();
@@ -25,6 +25,12 @@ export const Navbar = () => {
           </div>
 
           <div className="flex items-center gap-2">
+            {authUser && (
+              <Link to="/ai" className="btn btn-sm gap-2">
+                <Bot className="w-4 h-4" />
+                <span className="hidden sm:inline">Ask AI</span>
+              </Link>
+            )}
             <Link
               to={"/settings"}
               className={`

@@ -12,7 +12,7 @@ export const askAssistantController = async (req, res) => {
     }
 
     const result = await ai.models.generateContent({
-      model: "gemini-2.0-flash-001", // or "gemini-1.5-flash"
+      model: "gemini-2.5-flash", // or "gemini-1.5-flash"
       contents: [
         {
           role: "user",
@@ -25,6 +25,7 @@ export const askAssistantController = async (req, res) => {
       result?.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
 
     res.status(200).json({ reply });
+    console.log("Gemini response successfull");
   } catch (error) {
     console.error("Gemini AI error:", error);
     res.status(500).json({ error: "Failed to generate response" });
