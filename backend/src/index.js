@@ -1,9 +1,9 @@
 import express from "express";
 import { NODE_ENV, PORT } from "./config/serverConfig.js";
 import { createServer } from "http";
-//import authRoutes from "./routes/auth.routes.js";
-//import messageRoutes from "./routes/message.routes.js";
-//import aiRoutes from "./routes/ai.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import messageRoutes from "./routes/message.routes.js";
+import aiRoutes from "./routes/ai.routes.js";
 import { connectDB } from "./config/dbConfig.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -24,9 +24,9 @@ app.use(
   })
 );
 
-// app.use("/api/auth", authRoutes);
-// app.use("/api/messages", messageRoutes);
-// app.use("/api/ai", aiRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.get("/ping", (req, res) => {
   return res.json({ message: "Pong" });
